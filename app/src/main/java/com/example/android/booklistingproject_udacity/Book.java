@@ -8,20 +8,20 @@ import static android.R.attr.description;
 
 public class Book {
 
-    private String mTitleMain;
-    private String mTitleSub;
+    private String mTitle;
     private String mDescription;
     private String mImageResourceId;
+    private String mPreviewLink;
 
-    public Book(String title_main, String title_sub, String description,String imageResourceId){
-        mTitleMain = title_main;
-        mTitleSub = title_sub;
+    public Book(String title, String description,String imageResourceId, String previewLink){
+        mTitle = title;
         mDescription = description;
         mImageResourceId = imageResourceId;
+        mPreviewLink = previewLink;
     }
 
-    public String getTitleMain() {return mTitleMain;}
-    public String getTitleSub() {return mTitleSub;}
+    public String getTitleMain() {return mTitle;}
     public String getDescription() {return mDescription;}
     public String getmImageResourceId() {return mImageResourceId;}
+    public String getPreviewLink(){return mPreviewLink;}
 }

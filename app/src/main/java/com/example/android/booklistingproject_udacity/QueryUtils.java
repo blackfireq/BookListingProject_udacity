@@ -135,13 +135,13 @@ public final class QueryUtils {
 
             for(int i=0;i<items.length();i++) {
 
-                JSONObject volumeInfo = items.getJSONObject(i);
+                JSONObject item = items.getJSONObject(i);
+
+                //Extract volumeInfo
+                JSONObject volumeInfo = item.getJSONObject("volumeInfo");
 
                 // Extract Title
-                String title_main = volumeInfo.getString("title");
-
-                //Extract sub title
-                String title_sub = volumeInfo.getString("subtitle");
+                String title = volumeInfo.getString("title");
 
                 //Extract Description
                 String description = volumeInfo.getString("description");
@@ -150,7 +150,10 @@ public final class QueryUtils {
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                 String imageResourceId = imageLinks.getString("thumbnail");
 
-                books.add(new Book(title_main,title_sub,description,imageResourceId));
+                //Extract previewLink
+                String previewLink = volumeInfo.getString("previewLink");
+
+                books.add(new Book(title,description,imageResourceId,previewLink));
             }
 
 
