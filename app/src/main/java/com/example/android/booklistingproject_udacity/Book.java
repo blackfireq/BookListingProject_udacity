@@ -9,19 +9,16 @@ import static android.R.attr.description;
 public class Book {
 
     private String mTitle;
-    private String mDescription;
-    private String mImageResourceId;
+    private String mAuthorList;
     private String mPreviewLink;
 
-    public Book(String title, String description,String imageResourceId, String previewLink){
+    public Book(String title, String authorList, String previewLink){
         mTitle = title;
-        mDescription = description;
-        mImageResourceId = imageResourceId;
+        mAuthorList = authorList;
         mPreviewLink = previewLink;
     }
 
-    public String getTitleMain() {return mTitle;}
-    public String getDescription() {return mDescription;}
-    public String getmImageResourceId() {return mImageResourceId;}
+    public String getTitle() {return mTitle;}
+    public String getAuthorList() {return mAuthorList;}
     public String getPreviewLink(){return mPreviewLink;}
 }

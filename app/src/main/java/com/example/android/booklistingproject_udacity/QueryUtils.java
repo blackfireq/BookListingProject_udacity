@@ -16,6 +16,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import static android.R.attr.author;
+import static android.R.attr.description;
 import static com.example.android.booklistingproject_udacity.BookActivity.LOG_TAG;
 
 /**
@@ -87,7 +89,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the Book JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -143,17 +145,18 @@ public final class QueryUtils {
                 // Extract Title
                 String title = volumeInfo.getString("title");
 
-                //Extract Description
-                String description = volumeInfo.getString("description");
-
-                //Extract thumbnail
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String imageResourceId = imageLinks.getString("thumbnail");
+                //Extract Authors
+                JSONArray authors = volumeInfo.getJSONArray("authors");
+                String authorList ="";
+                for (int a=0;a<authors.length();a++){
+                    authorList += authors.getString(a)+", ";
+                    Log.i("Robin",authorList);
+                }
 
                 //Extract previewLink
                 String previewLink = volumeInfo.getString("previewLink");
 
-                books.add(new Book(title,description,imageResourceId,previewLink));
+                books.add(new Book(title,authorList,previewLink));
             }
 
 

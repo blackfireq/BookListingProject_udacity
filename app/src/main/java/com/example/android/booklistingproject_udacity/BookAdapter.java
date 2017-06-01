@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.R.attr.description;
+import static android.R.attr.thumbnail;
+
 /**
  * Created by mikem on 5/31/2017.
  */
@@ -40,20 +43,15 @@ public class BookAdapter  extends ArrayAdapter<Book>{
         //get the view that will diplay the main title of the current book
         TextView title_main = (TextView)convertView.findViewById(R.id.title_view);
 
-        //get the view that will diplay the description of the current book
-        TextView description = (TextView)convertView.findViewById(R.id.description_view);
-
-        //get the view that will diplay the image of the current book
-        ImageView thumbnail = (ImageView)convertView.findViewById(R.id.thumbnail_view);
+        //get the view that will diplay the authors of the current book
+        TextView authorList = (TextView)convertView.findViewById(R.id.authorList_view);
 
         //setters
 
         //set the main title of the current book
-        title_main.setText(currentBook.getTitleMain());
-        //set the description of the current book
-        description.setText(currentBook.getDescription());
-        //set the thumbnail of the current book
-        thumbnail.setImageResource(R.mipmap.ic_launcher);
+        title_main.setText(currentBook.getTitle());
+        //set the Authors of the current book
+        authorList.setText(currentBook.getAuthorList());
 
         return convertView;
     }

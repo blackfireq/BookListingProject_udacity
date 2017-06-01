@@ -9,21 +9,13 @@
         android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="main title"
         android:textSize="24sp"
         />
 
-    <ImageView
-        android:id="@+id/thumbnail_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
     <TextView
-        android:id="@+id/description_view"
+        android:id="@+id/authorList_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="desc"
         android:textSize="14sp"
         />
 </LinearLayout>

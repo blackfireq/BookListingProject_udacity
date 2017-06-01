@@ -23,6 +23,7 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.example.android.booklistingproject_udacity.R.id.keyword;
 
 public class BookActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
@@ -45,6 +46,9 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     /** Progress bar when loading initial data*/
     private ProgressBar mProgressBarView;
 
+    /** keyword for search*/
+    private String mKeyword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,20 +68,12 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         mEmptyStateTextView = (TextView) findViewById(R.id.emptyList);
 
         if(isConnected) {
-            // new BookTask().execute(GOOGLE_URL);
-            // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
-
-            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-            // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(BOOK_LOADER_ID, null, this);
 
             // Find a reference to the {@link ListView} in the layout
             ListView bookListView = (ListView) findViewById(R.id.list);
 
             //Find a reference to the {@link keyword} in the layout
-            EditText keyword = (EditText)findViewById(R.id.keyword);
+            final EditText keyword = (EditText)findViewById(R.id.keyword);
 
             //Find a reference to the {@link searchButton}
             TextView searchButton = (TextView)findViewById(R.id.search_button);
@@ -107,6 +103,23 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 }
             });
+
+            searchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mKeyword = keyword.getText().toString();
+                    // new BookTask().execute(GOOGLE_URL);
+                    // Get a reference to the LoaderManager, in order to interact with loaders.
+                    LoaderManager loaderManager = getLoaderManager();
+
+                    // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+                    // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+                    // because this activity implements the LoaderCallbacks interface).
+                    loaderManager.initLoader(BOOK_LOADER_ID, null, BookActivity.this);
+
+                }
+            });
         } else {
             mProgressBarView.setVisibility(GONE);
             mEmptyStateTextView.setVisibility(VISIBLE);
@@ -117,7 +130,8 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         // Create a new loader for the given URL
-        return new BookLoader(this, updateURL("harry potter "));
+        String url = updateURL(mKeyword.toString());
+        return new BookLoader(this, url);
     }
 
     @Override
@@ -127,9 +141,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // Set empty state text to display "No books found."
         mEmptyStateTextView.setText(R.string.empty_list);
-
-
-
 
         mAdapter.clear();
 
@@ -145,7 +156,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private String updateURL(String searchWord){
         searchWord = cleanUpString(searchWord);
-        String updatedURL = GOOGLE_BOOK_URL+searchWord+"&maxResults=1";
+        String updatedURL = GOOGLE_BOOK_URL+searchWord+"&maxResults=30";
         Log.i("batman",updatedURL);
 
         return updatedURL;
@@ -161,7 +172,4 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         return searchWord;
     }
 
-    private void getSearchResults(){
-
-    }
 }
