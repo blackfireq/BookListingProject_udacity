@@ -146,12 +146,15 @@ public final class QueryUtils {
                 String title = volumeInfo.getString("title");
 
                 //Extract Authors
-                JSONArray authors = volumeInfo.getJSONArray("authors");
                 String authorList ="";
-                for (int a=0;a<authors.length();a++){
-                    authorList += authors.getString(a)+", ";
-                    Log.i("Robin",authorList);
-                }
+                if(volumeInfo.has("authors")){
+                    JSONArray authors = volumeInfo.getJSONArray("authors");
+                    //needs work
+                    for (int a = 0; a < authors.length(); a++) {
+                        String currentAuthor = authors.getString(a);
+                            authorList += currentAuthor + ", ";
+                    }
+                } else { authorList = "No Authors Listed"; }
 
                 //Extract previewLink
                 String previewLink = volumeInfo.getString("previewLink");

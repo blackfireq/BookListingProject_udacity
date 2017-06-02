@@ -36,6 +36,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int BOOK_LOADER_ID = 1;
+    private static int loaderID = 1;
 
     /** Adapter for the list of books */
     private BookAdapter mAdapter;
@@ -66,6 +67,11 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         mEmptyStateTextView = (TextView) findViewById(R.id.emptyList);
+
+        // new BookTask().execute(GOOGLE_URL);
+        // Get a reference to the LoaderManager, in order to interact with loaders.
+        final LoaderManager loaderManager = getLoaderManager();
+
 
         if(isConnected) {
 
@@ -107,21 +113,20 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //show snapper while loading
+                    mProgressBarView.setVisibility(VISIBLE);
 
+                    //get current keyword to search
                     mKeyword = keyword.getText().toString();
-                    // new BookTask().execute(GOOGLE_URL);
-                    // Get a reference to the LoaderManager, in order to interact with loaders.
-                    LoaderManager loaderManager = getLoaderManager();
 
                     // Initialize the loader. Pass in the int ID constant defined above and pass in null for
                     // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
                     // because this activity implements the LoaderCallbacks interface).
-                    loaderManager.initLoader(BOOK_LOADER_ID, null, BookActivity.this);
+                    loaderManager.initLoader(loaderID, null, BookActivity.this);
 
                 }
             });
         } else {
-            mProgressBarView.setVisibility(GONE);
             mEmptyStateTextView.setVisibility(VISIBLE);
             mEmptyStateTextView.setText(R.string.noInternet);
         }
@@ -138,7 +143,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         //hide progress bar when loading is done
         mProgressBarView.setVisibility(GONE);
-
         // Set empty state text to display "No books found."
         mEmptyStateTextView.setText(R.string.empty_list);
 
@@ -147,6 +151,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
         }
+        loaderID++;
     }
 
     @Override
@@ -157,8 +162,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     private String updateURL(String searchWord){
         searchWord = cleanUpString(searchWord);
         String updatedURL = GOOGLE_BOOK_URL+searchWord+"&maxResults=30";
-        Log.i("batman",updatedURL);
-
         return updatedURL;
     }
 
