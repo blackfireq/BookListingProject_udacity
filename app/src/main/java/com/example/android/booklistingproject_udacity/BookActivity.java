@@ -36,7 +36,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int BOOK_LOADER_ID = 1;
-    private static int loaderID = 1;
 
     /** Adapter for the list of books */
     private BookAdapter mAdapter;
@@ -122,10 +121,13 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
                     // Initialize the loader. Pass in the int ID constant defined above and pass in null for
                     // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
                     // because this activity implements the LoaderCallbacks interface).
-                    loaderManager.initLoader(loaderID, null, BookActivity.this);
+                    loaderManager.restartLoader(BOOK_LOADER_ID, null, BookActivity.this);
 
                 }
             });
+            if (keyword != null) {
+                loaderManager.initLoader(BOOK_LOADER_ID, null, BookActivity.this);
+            }
         } else {
             mEmptyStateTextView.setVisibility(VISIBLE);
             mEmptyStateTextView.setText(R.string.noInternet);
@@ -134,9 +136,13 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
+
         // Create a new loader for the given URL
-        String url = updateURL(mKeyword.toString());
-        return new BookLoader(this, url);
+        String url = updateURL(mKeyword);
+
+
+            return new BookLoader(this, url);
+
     }
 
     @Override
@@ -151,7 +157,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
         }
-        loaderID++;
     }
 
     @Override
@@ -159,20 +164,30 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter.clear();
     }
 
+
+
     private String updateURL(String searchWord){
-        searchWord = cleanUpString(searchWord);
-        String updatedURL = GOOGLE_BOOK_URL+searchWord+"&maxResults=30";
-        return updatedURL;
+        //searchWord = cleanUpString(searchWord);
+        if(searchWord !=null) {
+            String updatedURL = GOOGLE_BOOK_URL+searchWord+"&maxResults=30";
+            return updatedURL;
+        }
+      return null;
     }
 
     private String cleanUpString (String searchWord){
         //trim leading and trailing spaces
-        searchWord.trim();
+        if(searchWord != null) {
+            searchWord.trim();
+            while(searchWord.contains(" ")){
+                searchWord.replace(" ","+");
+            }
+            return searchWord;
+            }
+            return null;
+        }
+
         // replace the spaces with plus symbol
-      while(searchWord.contains(" ")){
-            searchWord.replace(" ","+");
-      }
-        return searchWord;
-    }
+
 
 }
